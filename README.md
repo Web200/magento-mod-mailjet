@@ -6,6 +6,7 @@ Features
 * Mailjet properties FirstName LastName and DOB is sent when synchronisation
 * Add Firstname / Lastname / Dob in Admin subscription grid
 * Add Firstname / Lastname / Dob in Magento\Newsletter\Model\Subscriber
+
 You can save guest subscription :
 
 ```php
