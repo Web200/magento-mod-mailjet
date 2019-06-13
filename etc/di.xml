@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Web200_Mailjet Magento component
+ *
+ * @category    Web200
+ * @package     Web200_Mailjet
+ * @author      Web200 Team <contact@web200.fr>
+ * @copyright   Web200 (https://www.web200.fr)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Send subscription to Mailjet / Add Firstname - Lastname - Dob to Subscriber model  -->
+    <type name="Magento\Newsletter\Model\Subscriber">
+        <plugin name="w200-mailjet-subscriber"
+                type="Web200\Mailjet\Plugin\Model\SubscriberPlugin" sortOrder="10"/>
+    </type>
+    <!-- Add firstname, Lastname, Dob in Subscriber Collection  -->
+    <type name="Magento\Newsletter\Model\ResourceModel\Subscriber\Collection">
+        <plugin sortOrder="1" name="w200_mailjet_subscriber_collection"
+                type="Web200\Mailjet\Plugin\Model\ResourceModel\Subscriber\CollectionPlugin"/>
+    </type>
+    <!-- Logger -->
+    <type name="Web200\Mailjet\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <!-- Logger -->
+    <type name="Web200\Mailjet\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">mailjet_logger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">Web200\Mailjet\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

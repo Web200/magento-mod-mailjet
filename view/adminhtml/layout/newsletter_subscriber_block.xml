@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.newslettrer.subscriber.grid.columnSet">
+            <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newslettrer.subscriber.grid.columnSet.dob" as="dob">
+                <arguments>
+                    <argument name="header" xsi:type="string" translate="true">Customer Dob</argument>
+                    <argument name="sortable" xsi:type="string">0</argument>
+                    <argument name="filter" xsi:type="string">0</argument>
+                    <argument name="type" xsi:type="string">date</argument>
+                    <argument name="id" xsi:type="string">dob</argument>
+                    <argument name="index" xsi:type="string">dob</argument>
+                    <argument name="default" xsi:type="string">----</argument>
+                    <argument name="renderer" xsi:type="string">Web200\Mailjet\Block\Widget\Grid\Column\Renderer\Date</argument>
+                    <argument name="header_css_class" xsi:type="string">col-dob</argument>
+                    <argument name="column_css_class" xsi:type="string">col-dob</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
