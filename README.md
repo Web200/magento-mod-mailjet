@@ -3,7 +3,7 @@ Mailjet Sync
 Features 
 ========
 * Sync Mail subscription / unsubscription with MailJet
-* Mailjet properties FirstName LastName and DOB is sent when synchronisation
+* Mailjet properties *firstname* *lastname* and *dob* is sent when synchronisation (You need to create properties in MailJet)
 * Add Firstname / Lastname / Dob in Admin subscription grid
 * Add Firstname / Lastname / Dob in Magento\Newsletter\Model\Subscriber
 
@@ -11,14 +11,8 @@ You can save guest subscription :
 
 ```php
 $factory = $this->subscriberFactory->create();
-if (strlen($lastname) > 0) {
-    $factory->setSubscriberLastname($lastname);
-}
-if (strlen($lastname) > 0) {
-    $factory->setSubscriberFirstname($firstname);
-}
-if (strlen($dob) > 0) {
-    $factory->setSubscriberDob($dob);
-}
+$factory->setSubscriberLastname($lastname);
+$factory->setSubscriberFirstname($firstname);
+$factory->setSubscriberDob($dob);
 $factory->subscribe($email);
 ```
