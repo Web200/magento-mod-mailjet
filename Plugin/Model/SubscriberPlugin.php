@@ -1,13 +1,7 @@
 <?php
-/**
- * Web200_Mailjet Magento component
- *
- * @category    Web200
- * @package     Web200_Mailjet
- * @author      Web200 Team <contact@web200.fr>
- * @copyright   Web200 (https://www.web200.fr)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
+
+declare(strict_types=1);
+
 namespace Web200\Mailjet\Plugin\Model;
 
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
@@ -16,15 +10,25 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\StoreManagerInterface;
-use Web200\Mailjet\Helper\Config;
-use Web200\Mailjet\Helper\Sync as SyncHelper;
+use Web200\Mailjet\Model\Config;
+use Web200\Mailjet\Model\Sync;
 
+/**
+ * Class SubscriberPlugin
+ *
+ * @category    Class
+ * @package     Web200\Mailjet\Plugin\Model
+ * @author      Web200 Team <contact@web200.fr>
+ * @copyright   Web200
+ * @license     https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link        https://www.web200.fr/
+ */
 class SubscriberPlugin
 {
     /**
-     * @var SyncHelper
+     * @var Sync
      */
-    protected $syncHelper;
+    protected $sync;
     /**
      * @var CustomerRepository
      */
@@ -40,29 +44,29 @@ class SubscriberPlugin
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
 
     /**
-     * @param SyncHelper $syncHelper
-     * @param Config $config
-     * @param CustomerRepository $customerRepository
-     * @param CustomerSession $customerSession
+     * SubscriberPlugin constructor.
+     *
+     * @param Sync                  $sync
+     * @param Config                $config
+     * @param CustomerRepository    $customerRepository
+     * @param CustomerSession       $customerSession
      * @param StoreManagerInterface $storeManager
      */
-
     public function __construct(
-        SyncHelper $syncHelper,
+        Sync $sync,
         Config $config,
         CustomerRepository $customerRepository,
         CustomerSession $customerSession,
         StoreManagerInterface $storeManager
     ) {
-
-        $this->syncHelper = $syncHelper;
+        $this->sync               = $sync;
         $this->customerRepository = $customerRepository;
-        $this->customerSession = $customerSession;
-        $this->storeManager = $storeManager;
-        $this->config = $config;
+        $this->customerSession    = $customerSession;
+        $this->storeManager       = $storeManager;
+        $this->config             = $config;
     }
 
     /**
@@ -83,7 +87,7 @@ class SubscriberPlugin
             } catch (NoSuchEntityException $e) {
                 return [$customerId];
             }
-            $this->syncHelper->update(
+            $this->sync->update(
                 false,
                 $customer->getEmail(),
                 $customer->getFirstname(),
@@ -117,7 +121,7 @@ class SubscriberPlugin
             } catch (NoSuchEntityException $e) {
                 return [$customerId];
             }
-            $this->syncHelper->update(
+            $this->sync->update(
                 true,
                 $customer->getEmail(),
                 $customer->getFirstname(),
@@ -148,7 +152,7 @@ class SubscriberPlugin
             $lastname = $subscriber->getData('subscriber_lastname');
             $firstname = $subscriber->getData('subscriber_firstname');
             $dob = $subscriber->getData('subscriber_dob');
-            $this->syncHelper->update(
+            $this->sync->update(
                 true,
                 $email,
                 $firstname,
@@ -173,28 +177,34 @@ class SubscriberPlugin
      */
     public function afterSetOrigData(Subscriber $subject, $subscriber)
     {
-        if (strlen($subscriber->getData('subscriber_firstname')) != '') {
+        if (strlen($subscriber->getData('subscriber_firstname')) !== '') {
             $subscriber->setData('firstname', $subscriber->getData('subscriber_firstname'));
         }
-        if (strlen($subscriber->getData('subscriber_lastname')) != '') {
+        if (strlen($subscriber->getData('subscriber_lastname')) !== '') {
             $subscriber->setData('lastname', $subscriber->getData('subscriber_lastname'));
         }
-        if (strlen($subscriber->getData('subscriber_dob')) != '') {
+        if (strlen($subscriber->getData('subscriber_dob')) !== '') {
             $subscriber->setData('dob', $subscriber->getData('subscriber_dob'));
         }
         return $subscriber;
     }
 
-    private function buildProperties($properties)
+    /**
+     * Build properties
+     *
+     * @param $properties
+     * @return mixed
+     */
+    protected function buildProperties($properties)
     {
         $final = [];
         foreach ($properties as $key => $value) {
-            if ($key == 'dob' && strlen($value) > 0) {
-                $properties['dob'] = $value.'T00:00:00+00:00';
+            if ($key === 'dob' && $value !== '') {
+                $final['dob'] = $value.'T00:00:00+00:00';
             } else {
                 $final[$key] = $value;
             }
         }
-        return $properties;
+        return $final;
     }
 }
