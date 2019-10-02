@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Web200\Mailjet\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -28,16 +29,23 @@ class Config
      * @var EncryptorInterface
      */
     protected $encryptor;
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
     /**
      * Config constructor.
      *
-     * @param EncryptorInterface $encryptor
+     * @param EncryptorInterface   $encryptor
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->encryptor = $encryptor;
+        $this->encryptor   = $encryptor;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
