@@ -99,4 +99,26 @@ class Config
     {
         return $this->scopeConfig->getValue($path, $scope);
     }
+
+    /**
+     * Check login information
+     *
+     * @return bool
+     */
+    public function checkLogin(): bool
+    {
+        if ($this->config->getApiKeyPublic() === '') {
+            $this->logger->error('Api Public Key empty');
+            return false;
+        }
+        if ($this->config->getApiKeyPrivate() === '') {
+            $this->logger->error('Api Secret Key empty');
+            return false;
+        }
+        if ($this->config->getContactList() === '') {
+            $this->logger->error('Contact List empty');
+            return false;
+        }
+        return true;
+    }
 }

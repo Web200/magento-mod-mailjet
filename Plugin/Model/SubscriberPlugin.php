@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\StoreManagerInterface;
 use Web200\Mailjet\Model\Config;
-use Web200\Mailjet\Model\Sync;
+use Web200\Mailjet\Model\Webservice\Contact;
 
 /**
  * Class SubscriberPlugin
@@ -26,9 +26,9 @@ use Web200\Mailjet\Model\Sync;
 class SubscriberPlugin
 {
     /**
-     * @var Sync
+     * @var Contact
      */
-    protected $sync;
+    protected $contact;
     /**
      * @var CustomerRepository
      */
@@ -49,20 +49,20 @@ class SubscriberPlugin
     /**
      * SubscriberPlugin constructor.
      *
-     * @param Sync                  $sync
+     * @param Contact               $contact
      * @param Config                $config
      * @param CustomerRepository    $customerRepository
      * @param CustomerSession       $customerSession
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Sync $sync,
+        Contact $contact,
         Config $config,
         CustomerRepository $customerRepository,
         CustomerSession $customerSession,
         StoreManagerInterface $storeManager
     ) {
-        $this->sync               = $sync;
+        $this->contact            = $contact;
         $this->customerRepository = $customerRepository;
         $this->customerSession    = $customerSession;
         $this->storeManager       = $storeManager;
@@ -87,7 +87,7 @@ class SubscriberPlugin
             } catch (NoSuchEntityException $e) {
                 return [$customerId];
             }
-            $this->sync->update(
+            $this->contact->update(
                 false,
                 $customer->getEmail(),
                 $customer->getFirstname(),
@@ -121,7 +121,7 @@ class SubscriberPlugin
             } catch (NoSuchEntityException $e) {
                 return [$customerId];
             }
-            $this->sync->update(
+            $this->contact->update(
                 true,
                 $customer->getEmail(),
                 $customer->getFirstname(),
@@ -152,7 +152,7 @@ class SubscriberPlugin
             $lastname = $subscriber->getData('subscriber_lastname');
             $firstname = $subscriber->getData('subscriber_firstname');
             $dob = $subscriber->getData('subscriber_dob');
-            $this->sync->update(
+            $this->contact->update(
                 true,
                 $email,
                 $firstname,
