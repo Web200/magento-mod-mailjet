@@ -23,6 +23,10 @@
         <plugin sortOrder="1" name="w200_mailjet_subscriber_collection"
                 type="Web200\Mailjet\Plugin\Model\ResourceModel\Subscriber\CollectionPlugin"/>
     </type>
+    <!-- Add Mailjet Email Template -->
+    <type name="Web200\Mailing\Model\Source\EmailTemplate">
+        <plugin sortOrder="1" name="web200_mailjet_email_template" type="Web200\Mailjet\Plugin\EmailTemplate"/>
+    </type>
     <!-- Logger -->
     <type name="Web200\Mailjet\Logger\Handler">
         <arguments>
