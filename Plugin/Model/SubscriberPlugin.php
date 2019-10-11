@@ -16,7 +16,6 @@ use Web200\Mailjet\Model\Webservice\Contact;
 /**
  * Class SubscriberPlugin
  *
- * @category    Class
  * @package     Web200\Mailjet\Plugin\Model
  * @author      Web200 Team <contact@web200.fr>
  * @copyright   Web200

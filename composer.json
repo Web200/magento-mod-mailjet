@@ -2,10 +2,11 @@
   "name": "web200/magento-mod-mailjet",
   "description": "Magento 2 Mailjet Module",
   "type": "magento2-module",
-  "homepage": "https://github.com/mailjet/mailjet-apiv3-php/",
+  "homepage": "https://github.com/Web200/magento-mod-mailjet",
   "license": "MIT",
   "require": {
-    "mailjet/mailjet-apiv3-php": "1.4.1"
+    "mailjet/mailjet-apiv3-php": "1.4.1",
+    "magento/framework": "102.0.*"
   },
   "autoload": {
     "files": [

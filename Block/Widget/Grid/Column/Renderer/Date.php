@@ -10,7 +10,6 @@ use Magento\Framework\DataObject;
 /**
  * Class Date
  *
- * @category    Class
  * @package     Web200\Mailjet\Block\Widget\Grid\Column\Renderer
  * @author      Web200 Team <contact@web200.fr>
  * @copyright   Web200
@@ -33,8 +32,10 @@ class Date extends AbstractRenderer
             if (!($date instanceof \DateTimeInterface)) {
                 $date = new \DateTime($date);
             }
+
             return $date->format('d/m/Y');
         }
+
         return $this->getColumn()->getDefault();
     }
 }

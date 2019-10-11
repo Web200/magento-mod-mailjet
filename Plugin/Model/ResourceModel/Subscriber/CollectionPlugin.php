@@ -9,7 +9,6 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber\Collection;
 /**
  * Class CollectionPlugin
  *
- * @category    Class
  * @package     Web200\Mailjet\Plugin\Model\ResourceModel\Subscriber
  * @author      Web200 Team <contact@web200.fr>
  * @copyright   Web200

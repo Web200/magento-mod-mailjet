@@ -5,46 +5,77 @@ declare(strict_types=1);
 namespace Web200\Mailjet\Model\Webservice;
 
 use \Mailjet\Resources;
-use Web200\Mailjet\Logger\Logger;
-use Web200\Mailjet\Model\Config;
 
 /**
  * Class Template
  *
- * @category    Class
- * @package     Web200\Mailjet\Model\Webservice
- * @author      Web200 Team <contact@web200.fr>
- * @copyright   Web200
- * @license     https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- * @link        https://www.web200.fr/
+ * @package   Web200\Mailjet\Model\Webservice
+ * @author    Web200 <contact@web200.fr>
+ * @copyright 2019 Web200
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      https://www.web200.fr/
  */
-class Template
+class Template extends Webservice
 {
     /**
-     * @var Config
+     * @var string
      */
-    protected $config;
-    /**
-     * @var Logger
-     */
-    protected $logger;
+    protected $apiVersion = 'v3';
     /**
      * @var array
      */
     protected $cacheTemplates;
+    /**
+     * @var int
+     */
+    protected $limit = 100;
+    /**
+     * @var string
+     */
+    protected $ownerType = 'user';
 
     /**
-     * Template constructor.
+     * Get Limit
      *
-     * @param Config $config
-     * @param Logger $logger
+     * @return int
      */
-    public function __construct(
-        Config $config,
-        Logger $logger
-    ) {
-        $this->config = $config;
-        $this->logger = $logger;
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    /**
+     * Set Limit
+     *
+     * @param int $limit
+     * @return Template
+     */
+    public function setLimit(int $limit): Template
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    /**
+     * Get Owner Type
+     *
+     * @return string
+     */
+    public function getOwnerType(): string
+    {
+        return $this->ownerType;
+    }
+
+    /**
+     * Set Owner Type
+     *
+     * @param string $ownerType
+     * @return Template
+     */
+    public function setOwnerType(string $ownerType): Template
+    {
+        $this->ownerType = $ownerType;
+        return $this;
     }
 
     /**
@@ -56,13 +87,10 @@ class Template
     {
         if ($this->cacheTemplates === null) {
             try {
-                $api      = new \Mailjet\Client(
-                    $this->config->getApiKeyPublic(),
-                    $this->config->getApiKeyPrivate()
-                );
+                $api      = $this->initApi();
                 $filters  = [
-                    'OwnerType' => 'user',
-                    'Limit' => '100'
+                    'OwnerType' => $this->getOwnerType(),
+                    'Limit' => $this->getLimit()
                 ];
                 $response = $api->get(Resources::$Template, ['filters' => $filters]);
                 if (!$response->success()) {
