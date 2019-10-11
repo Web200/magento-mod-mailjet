@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Web200\Mailjet\Plugin;
+namespace Web200\Mailjet\Plugin\Template;
 
 use Web200\Mailing\Model\Source\EmailTemplate as BaseEmailTemplate;
 use Web200\Mailjet\Model\Config as MailjetConfig;
 use Web200\Mailjet\Model\Config\Source\Template as MailjetTemplate;
 
 /**
- * Class EmailTemplate
+ * Class Source
  *
- * @category    Class
- * @package     Web200\Mailjet\Plugin
+ * @package     Web200\Mailjet\Plugin\Template
  * @author      Web200 Team <contact@web200.fr>
  * @copyright   Web200
  * @license     https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * @link        https://www.web200.fr/
  */
-class EmailTemplate
+class Source
 {
     /**
      * @var MailjetConfig
@@ -30,7 +29,7 @@ class EmailTemplate
     protected $mailjetTemplate;
 
     /**
-     * EmailTemplatePlugin constructor.
+     * SourceEmailTemplate constructor.
      *
      * @param MailjetConfig   $mailjetConfig
      * @param MailjetTemplate $mailjetTemplate
@@ -55,6 +54,7 @@ class EmailTemplate
         if ($this->mailjetConfig->active()) {
             $templates = $this->getMailjetTemplates($templates);
         }
+
         return $templates;
     }
 
@@ -73,6 +73,7 @@ class EmailTemplate
                 'label' => '[Mailjet] ' . $mailjetTemplate['label'],
             ];
         }
+
         return $templates;
     }
 }
