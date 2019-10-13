@@ -62,15 +62,15 @@ class Send
         } catch (\Exception $e) {
             return $proceed();
         }
-        if (property_exists($bodyVariables, 'template_id')) {
-            $templateId = (int)$bodyVariables->template_id;
+        if (isset($bodyVariables['template_id'])) {
+            $templateId = (int)$bodyVariables['template_id'];
         }
         if ($templateId === 0) {
             return $proceed();
         }
 
-        if (property_exists($bodyVariables, 'variables')) {
-            $mailVariables = $bodyVariables->variables;
+        if (isset($bodyVariables['variables'])) {
+            $mailVariables = $bodyVariables['variables'];
         }
 
         /** @var ZendMailAddress $address */
