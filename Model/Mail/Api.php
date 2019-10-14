@@ -4,6 +4,7 @@ namespace Web200\Mailjet\Model\Mail;
 
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Web200\Mailjet\Model\Config;
 use Web200\Mailjet\Model\Webservice\Email as MailjetEmail;
 use Zend\Mail\Address as ZendMailAddress;
 use Zend\Mail\AddressList as ZendMailAddressList;
@@ -21,30 +22,33 @@ use Zend\Mail\Message;
 class Api
 {
     /**
-     * Description mailjetEmail field
-     *
-     * @var MailjetEmail mailjetEmail
+     * @var MailjetEmail
      */
     protected $mailjetEmail;
     /**
-     * Description json field
-     *
-     * @var Json json
+     * @var Json
      */
     protected $json;
+    /**
+     * @var Config
+     */
+    protected $config;
 
     /**
      * Api constructor.
      *
      * @param MailjetEmail $mailjetEmail
      * @param Json         $json
+     * @param Config       $config
      */
     public function __construct(
         MailjetEmail $mailjetEmail,
-        Json $json
+        Json $json,
+        Config $config
     ) {
         $this->mailjetEmail = $mailjetEmail;
         $this->json         = $json;
+        $this->config       = $config;
     }
 
     /**
@@ -79,10 +83,17 @@ class Api
 
         $to = [];
         foreach ($message->getTo() as $address) {
-            $to[] = [
-                'Email' => $address->getEmail(),
-                'Name' => $address->getName()
-            ];
+            if ($this->config->testIsActive()) {
+                $to[] = [
+                    'Email' => $this->config->getTestEmail(),
+                    'Name' => 'Test'
+                ];
+            } else {
+                $to[] = [
+                    'Email' => $address->getEmail(),
+                    'Name' => $address->getName()
+                ];
+            }
         }
 
         if (!$message->getReplyTo()->count()) {

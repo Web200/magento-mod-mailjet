@@ -24,6 +24,8 @@ class Config
     public const PATH_API_KEY_PUBLIC = 'mailjet/general/api_key_public';
     public const PATH_API_KEY_PRIVATE = 'mailjet/general/api_key_private';
     public const PATH_CONTACT_LIST = 'mailjet/general/contact_list';
+    public const PATH_TEST_IS_ACTIVE = 'mailjet/test_mode/is_active';
+    public const PATH_TEST_EMAIL = 'mailjet/test_mode/email';
 
     /**
      * @var EncryptorInterface
@@ -86,6 +88,26 @@ class Config
     public function getContactList(): string
     {
         return (string)$this->getConfigValue(self::PATH_CONTACT_LIST);
+    }
+
+    /**
+     * Is Test active ?
+     *
+     * @return bool
+     */
+    public function testIsActive(): bool
+    {
+        return (bool)$this->getConfigValue(self::PATH_TEST_IS_ACTIVE);
+    }
+
+    /**
+     * get Test Email
+     *
+     * @return string
+     */
+    public function getTestEmail(): string
+    {
+        return (string)$this->getConfigValue(self::PATH_TEST_EMAIL);
     }
 
     /**
