@@ -44,7 +44,8 @@ Others
 * Mailjet properties *firstname* *lastname* and *dob* is sent when synchronisation (You need to create properties in MailJet)
 * Add Firstname / Lastname / Dob in Admin subscription grid
 * Add Firstname / Lastname / Dob in Magento\Newsletter\Model\Subscriber
-* Send mail through mailjet api if mailjet template choose.
+* Send mail through mailjet api.
+* Send test email to specific email, if test config is active
 
 You can save guest subscription :
 
