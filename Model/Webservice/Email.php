@@ -32,6 +32,14 @@ class Email extends Webservice
      */
     protected $to = '';
     /**
+     * @var string
+     */
+    protected $replyToEmail = '';
+    /**
+     * @var string
+     */
+    protected $replyToName = '';
+    /**
      * @var int
      */
     protected $templateId = null;
@@ -50,27 +58,42 @@ class Email extends Webservice
     public function send()
     {
         try {
-            $api      = $this->initApi();
-            $body     = [
+            $api  = $this->initApi();
+            $body = [
                 'Messages' => [
                     [
                         'From' => [
                             'Email' => $this->getFromEmail(),
                             'Name' => $this->getFromName()
                         ],
-                        'To' => $this->getTo(),
-                        'TemplateID' => $this->getTemplateId(),
-                        'TemplateLanguage' => true,
-                        'Variables' => $this->getVariables()
+                        'To' => $this->getTo()
                     ]
                 ]
             ];
+
+            if ($this->getTemplateId()) {
+                $body['TemplateID']       = $this->getTemplateId();
+                $body['TemplateLanguage'] = true;
+            }
+
+            if ($this->getVariables() && count($this->getVariables()) > 0) {
+                $body['Variables'] = $this->getVariables();
+            }
+
+            if ($this->getReplyToEmail()) {
+                $body['ReplyTo'] = [
+                    'Email' => $this->getReplyToEmail(),
+                    'Name' => $this->getReplyToName()
+                ];
+            }
+
             $response = $api->post(Resources::$Email, ['body' => $body]);
             if (!$response->success()) {
                 $this->logger->error($response->getReasonPhrase());
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
+
             return false;
         }
     }
@@ -93,7 +116,8 @@ class Email extends Webservice
      */
     public function setFromEmail(string $fromEmail): Email
     {
-        $this->fromEmail = $fromEmail;
+        $this->fromEmail = trim($fromEmail);
+
         return $this;
     }
 
@@ -115,7 +139,8 @@ class Email extends Webservice
      */
     public function setFromName(string $fromName): Email
     {
-        $this->fromName = $fromName;
+        $this->fromName = trim($fromName);
+
         return $this;
     }
 
@@ -138,6 +163,7 @@ class Email extends Webservice
     public function setTo($to): Email
     {
         $this->to = $to;
+
         return $this;
     }
 
@@ -160,13 +186,14 @@ class Email extends Webservice
     public function setTemplateId(int $templateId): Email
     {
         $this->templateId = $templateId;
+
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getVariables(): array
+    public function getVariables(): ?array
     {
         return $this->variables;
     }
@@ -178,6 +205,45 @@ class Email extends Webservice
     public function setVariables(array $variables): Email
     {
         $this->variables = $variables;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToEmail(): string
+    {
+        return $this->replyToEmail;
+    }
+
+    /**
+     * @param string $replyToEmail
+     * @return Email
+     */
+    public function setReplyToEmail(string $replyToEmail): Email
+    {
+        $this->replyToEmail = trim($replyToEmail);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToName(): string
+    {
+        return $this->replyToName;
+    }
+
+    /**
+     * @param string $replyToName
+     * @return Email
+     */
+    public function setReplyToName(string $replyToName): Email
+    {
+        $this->replyToName = trim($replyToName);
+
         return $this;
     }
 }

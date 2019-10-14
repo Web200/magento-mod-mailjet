@@ -26,15 +26,15 @@
     <!-- Send email with mailjet template // -->
     <!-- Add mailjet email template to email template list -->
     <type name="Web200\Mailing\Model\Source\EmailTemplate">
-        <plugin sortOrder="10" name="web200_mailjet_source_email_template" type="Web200\Mailjet\Plugin\Template\Source"/>
+        <plugin sortOrder="1" name="web200_mailjet_source_email_template" type="Web200\Mailjet\Plugin\Template\Source"/>
     </type>
     <!-- Override template -->
     <type name="Magento\Email\Model\Template">
-        <plugin sortOrder="10" name="web200_mailjet_source_mail_template" type="Web200\Mailjet\Plugin\Template\ProcessTemplate"/>
+        <plugin sortOrder="1" name="web200_mailjet_source_mail_template" type="Web200\Mailjet\Plugin\Template\ProcessTemplate"/>
     </type>
-    <!-- Override Send Mail If Mailjet Template -->
+    <!-- Override Send Mail -->
     <type name="Magento\Framework\Mail\TransportInterface">
-        <plugin sortOrder="10" name="web200_mailjet_mail_transport" type="Web200\Mailjet\Plugin\Template\Send"/>
+        <plugin sortOrder="1" name="web200_mailjet_mail_transport" type="Web200\Mailjet\Plugin\Send" />
     </type>
     <!-- // Send email with mailjet template -->
 
