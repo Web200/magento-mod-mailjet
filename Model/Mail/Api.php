@@ -75,6 +75,12 @@ class Api
         } catch (\Exception $e) {
         }
 
+        if ($templateId === 0) {
+            $this->mailjetEmail->setSubject($message->getSubject());
+            $this->mailjetEmail->setHtmlPart($message->getBodyText());
+            //$this->mailjetEmail->setTextPart('test');
+        }
+
         /** @var ZendMailAddress $address */
         foreach ($message->getFrom() as $address) {
             $this->mailjetEmail->setFromEmail($address->getEmail());

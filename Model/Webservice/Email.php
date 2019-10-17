@@ -49,6 +49,18 @@ class Email extends Webservice
      * @var array
      */
     protected $variables;
+    /**
+     * @var string
+     */
+    protected $subject = '';
+    /**
+     * @var string
+     */
+    protected $textPart = '';
+    /**
+     * @var string
+     */
+    protected $htmlPart = '';
 
     /**
      * Send Mail
@@ -59,33 +71,41 @@ class Email extends Webservice
     {
         try {
             $api  = $this->initApi();
-            $body = [
-                'Messages' => [
-                    [
-                        'From' => [
-                            'Email' => $this->getFromEmail(),
-                            'Name' => $this->getFromName()
-                        ],
-                        'To' => $this->getTo()
-                    ]
-                ]
+
+            $message = [];
+            $message['From'] = [
+                'Email' => $this->getFromEmail(),
+                'Name' => $this->getFromName()
             ];
+            $message['To'] = $this->getTo();
 
             if ($this->getTemplateId()) {
-                $body['TemplateID']       = $this->getTemplateId();
-                $body['TemplateLanguage'] = true;
+                $message['TemplateID']       = $this->getTemplateId();
+                $message['TemplateLanguage'] = true;
+            } else {
+                $message['Subject']       = $this->getSubject();
+                if ($this->getTextPart() !== '') {
+                    // $body['Messages']['TextPart']       = $this->getTextPart();
+                }
+                if ($this->getHtmlPart() !== '') {
+                    $message['HTMLPart']       = $this->getHtmlPart();
+                }
             }
 
             if ($this->getVariables() && count($this->getVariables()) > 0) {
-                $body['Variables'] = $this->getVariables();
+                $message['Variables'] = $this->getVariables();
             }
 
             if ($this->getReplyToEmail()) {
-                $body['ReplyTo'] = [
+                $message['ReplyTo'] = [
                     'Email' => $this->getReplyToEmail(),
                     'Name' => $this->getReplyToName()
                 ];
             }
+
+            $body = [
+                'Messages' => [ $message ]
+            ];
 
             $response = $api->post(Resources::$Email, ['body' => $body]);
             if (!$response->success()) {
@@ -243,6 +263,63 @@ class Email extends Webservice
     public function setReplyToName(string $replyToName): Email
     {
         $this->replyToName = trim($replyToName);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTextPart(): string
+    {
+        return $this->textPart;
+    }
+
+    /**
+     * @param string $textPart
+     * @return Email
+     */
+    public function setTextPart(string $textPart): Email
+    {
+        $this->textPart = $textPart;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlPart(): string
+    {
+        return $this->htmlPart;
+    }
+
+    /**
+     * @param string $htmlPart
+     * @return Email
+     */
+    public function setHtmlPart(string $htmlPart): Email
+    {
+        $this->htmlPart = $htmlPart;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject(): string
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param string $subject
+     * @return Email
+     */
+    public function setSubject(string $subject): Email
+    {
+        $this->subject = $subject;
 
         return $this;
     }
