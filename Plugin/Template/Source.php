@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Web200\Mailjet\Plugin\Template;
 
-use Web200\Mailing\Model\Source\EmailTemplate as BaseEmailTemplate;
 use Web200\Mailjet\Model\Config as MailjetConfig;
 use Web200\Mailjet\Model\Config\Source\Template as MailjetTemplate;
 
@@ -45,11 +44,11 @@ class Source
     /**
      * Add Mailjet Templates
      *
-     * @param BaseEmailTemplate $emailTemplate
-     * @param                   $templates
+     * @param $emailTemplate
+     * @param $templates
      * @return mixed
      */
-    public function afterToOptionArray(BaseEmailTemplate $emailTemplate, $templates): array
+    public function afterToOptionArray($emailTemplate, $templates): array
     {
         if ($this->mailjetConfig->active()) {
             $templates = $this->getMailjetTemplates($templates);

@@ -28,6 +28,10 @@
     <type name="Web200\Mailing\Model\Source\EmailTemplate">
         <plugin sortOrder="1" name="web200_mailjet_source_email_template" type="Web200\Mailjet\Plugin\Template\Source"/>
     </type>
+    <!-- Add mailjet email template to email template list -->
+    <type name="Magento\Config\Model\Config\Source\Email\Template">
+        <plugin sortOrder="1" name="web200_mailjet_source_mail_template" type="Web200\Mailjet\Plugin\Template\Source"/>
+    </type>
     <!-- Override template -->
     <type name="Magento\Email\Model\Template">
         <plugin sortOrder="1" name="web200_mailjet_source_mail_template" type="Web200\Mailjet\Plugin\Template\ProcessTemplate"/>
