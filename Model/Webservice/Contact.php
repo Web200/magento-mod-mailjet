@@ -46,6 +46,11 @@ class Contact extends Webservice
             return false;
         }
 
+        if ($this->config->getContactList() === '') {
+            $this->logger->error('Contact List empty');
+            return false;
+        }
+
         try {
             $api      = $this->initApi();
             $body     = [

@@ -81,9 +81,6 @@ class Webservice
         if ($this->config->getApiKeyPrivate() === '') {
             throw new LocalizedException(__('Api Secret Key empty'));
         }
-        if ($this->config->getContactList() === '') {
-            throw new LocalizedException(__('Contact List empty'));
-        }
         return true;
     }
 }
