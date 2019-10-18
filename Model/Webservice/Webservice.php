@@ -91,7 +91,7 @@ class Webservice
     /**
      * @return int
      */
-    public function getStoreId(): int
+    public function getStoreId(): ?int
     {
         return $this->storeId;
     }
