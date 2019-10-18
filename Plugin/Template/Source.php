@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Web200\Mailjet\Plugin\Template;
 
-use Web200\Mailjet\Model\Config as MailjetConfig;
+use Web200\Mailjet\Helper\Config as MailjetConfig;
 use Web200\Mailjet\Model\Config\Source\Template as MailjetTemplate;
 
 /**

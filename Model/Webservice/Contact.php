@@ -46,7 +46,7 @@ class Contact extends Webservice
             return false;
         }
 
-        if ($this->config->getContactList() === '') {
+        if ($this->config->getContactList($this->getStoreId()) === '') {
             $this->logger->error('Contact List empty');
             return false;
         }
@@ -56,7 +56,7 @@ class Contact extends Webservice
             $body     = [
                 'ContactsLists' => [
                     [
-                        'ListID' => $this->config->getContactList(),
+                        'ListID' => $this->config->getContactList($this->getStoreId()),
                         'action' => $subscribe ? self::ACTION_ADD_FORCE : self::ACTION_UNSUB
                     ]
                 ],

@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\StoreManagerInterface;
-use Web200\Mailjet\Model\Config;
+use Web200\Mailjet\Helper\Config;
 use Web200\Mailjet\Model\Webservice\Contact;
 
 /**

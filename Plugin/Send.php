@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Web200\Mailjet\Plugin;
 
 use Magento\Framework\Mail\TransportInterface;
-use Web200\Mailjet\Model\Config;
+use Web200\Mailjet\Helper\Config;
 use Web200\Mailjet\Model\Mail\Api;
 
 /**

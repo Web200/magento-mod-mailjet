@@ -23,6 +23,11 @@
                 type="Web200\Mailjet\Plugin\Model\ResourceModel\Subscriber\CollectionPlugin"/>
     </type>
 
+    <!-- Set correct store -->
+    <type name="Magento\Framework\Mail\Template\TransportBuilder">
+        <plugin sortOrder="1" name="w200_mailjet_store" type="Web200\Mailjet\Plugin\Store"/>
+    </type>
+
     <!-- Send email with mailjet template // -->
     <!-- Add mailjet email template to email template list -->
     <type name="Web200\Mailing\Model\Source\EmailTemplate">

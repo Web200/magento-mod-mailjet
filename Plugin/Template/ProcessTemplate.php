@@ -78,11 +78,44 @@ class ProcessTemplate
                 if (is_string($value)) {
                     $final[$key] = $value;
                 }
+                if (is_object($variables[$key])) {
+                    $final = $this->getMethodValue($final, $key, $variables[$key]);
+                }
             }
 
             return $final;
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    protected function getMethodValue($final, $key, $object)
+    {
+        $variableClass = new \ReflectionClass(get_class($object));
+        $publicMethods = $variableClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach ($publicMethods as $publicMethod) {
+            if (empty($publicMethod->getParameters()) && 0 === strpos($publicMethod->getName(), 'get')) {
+                $objectValue = $object->{$publicMethod->getName()}();
+                if (is_string($objectValue)) {
+                    $final[$key . preg_replace(
+                        '/get/',
+                        '',
+                        $this->camelCaseToUnderscore($publicMethod->getName()))] = $objectValue;
+                }
+            }
+        }
+
+        return $final;
+    }
+
+    /**
+     * CamelCase To Underscore
+     *
+     * @param $input
+     * @return string
+     */
+    protected function camelCaseToUnderscore($input): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
     }
 }
