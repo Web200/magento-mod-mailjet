@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Web200\Mailjet\Model\Webservice;
 
 use \Mailjet\Resources;
+use Web200\Mailjet\Helper\Config;
 
 /**
  * Class Template
@@ -87,7 +88,7 @@ class Template extends Webservice
     {
         if ($this->cacheTemplates === null) {
             try {
-                $api      = $this->initApi();
+                $api      = $this->initApi(Config::KIND_TRANSACTIONAL);
                 $filters  = [
                     'OwnerType' => $this->getOwnerType(),
                     'Limit' => $this->getLimit()

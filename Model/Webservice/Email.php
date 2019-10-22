@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Web200\Mailjet\Model\Webservice;
 
 use \Mailjet\Resources;
+use Web200\Mailjet\Helper\Config;
 
 /**
  * Class Email
@@ -70,7 +71,7 @@ class Email extends Webservice
     public function send()
     {
         try {
-            $api  = $this->initApi();
+            $api  = $this->initApi($this->getKind());
 
             $message = [];
             $message['From'] = [
@@ -116,6 +117,25 @@ class Email extends Webservice
 
             return false;
         }
+    }
+
+    /**
+     * Get Kind Email
+     *
+     * @return string
+     */
+    protected function getKind(): string
+    {
+        $kindEmail = Config::KIND_TRANSACTIONAL;
+        if ($this->getVariables() && count($this->getVariables()) > 0) {
+            if (isset($this->getVariables()['kind_email'])) {
+                $kindEmail = $this->getVariables()['kind_email'];
+            } elseif ($this->getVariables()['subscriber_id']) {
+                $kindEmail = Config::KIND_NEWSLETTER;
+            }
+        }
+
+        return $kindEmail;
     }
 
     /**

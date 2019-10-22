@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Web200\Mailjet\Model\Webservice;
 
+use Web200\Mailjet\Helper\Config;
 use \Mailjet\Resources;
 
 /**
@@ -52,7 +53,7 @@ class Contact extends Webservice
         }
 
         try {
-            $api      = $this->initApi();
+            $api      = $this->initApi(Config::KIND_NEWSLETTER);
             $body     = [
                 'ContactsLists' => [
                     [

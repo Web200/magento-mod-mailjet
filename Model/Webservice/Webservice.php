@@ -55,16 +55,17 @@ class Webservice
     /**
      * Init Api
      *
+     * @param string $kind
      * @return MailjetClient
      * @throws LocalizedException
      */
-    protected function initApi(): MailjetClient
+    protected function initApi(string $kind): MailjetClient
     {
-        $this->checkLogin();
+        $this->checkLogin($kind);
 
         $api = new MailjetClient(
-            $this->config->getApiKeyPublic($this->getStoreId()),
-            $this->config->getApiKeyPrivate($this->getStoreId()),
+            $this->config->getApiKeyPublic($kind, $this->getStoreId()),
+            $this->config->getApiKeyPrivate($kind, $this->getStoreId()),
             true,
             ['version' => $this->apiVersion]
         );
@@ -74,15 +75,16 @@ class Webservice
     /**
      * Check login information
      *
+     * @param string $kind
      * @return bool
      * @throws LocalizedException
      */
-    protected function checkLogin(): bool
+    protected function checkLogin(string $kind): bool
     {
-        if ($this->config->getApiKeyPublic($this->getStoreId()) === '') {
+        if ($this->config->getApiKeyPublic($kind, $this->getStoreId()) === '') {
             throw new LocalizedException(__('Api Public Key empty'));
         }
-        if ($this->config->getApiKeyPrivate($this->getStoreId()) === '') {
+        if ($this->config->getApiKeyPrivate($kind, $this->getStoreId()) === '') {
             throw new LocalizedException(__('Api Secret Key empty'));
         }
         return true;

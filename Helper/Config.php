@@ -24,10 +24,14 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Config extends AbstractHelper
 {
+    public const KIND_TRANSACTIONAL = 'TRANSACTIONAL';
+    public const KIND_NEWSLETTER = 'NEWSLETTER';
     public const PATH_ACTIVE = 'mailjet/general/active';
-    public const PATH_API_KEY_PUBLIC = 'mailjet/general/api_key_public';
-    public const PATH_API_KEY_PRIVATE = 'mailjet/general/api_key_private';
-    public const PATH_CONTACT_LIST = 'mailjet/general/contact_list';
+    public const PATH_TRANSACTIONAL_API_KEY_PUBLIC = 'mailjet/transactional/api_key_public';
+    public const PATH_TRANSACTIONAL_API_KEY_PRIVATE = 'mailjet/transactional/api_key_private';
+    public const PATH_NEWSLETTER_API_KEY_PUBLIC = 'mailjet/newsletter/api_key_public';
+    public const PATH_NEWSLETTER_API_KEY_PRIVATE = 'mailjet/newsletter/api_key_private';
+    public const PATH_NEWSLETTER_CONTACT_LIST = 'mailjet/newsletter/contact_list';
     public const PATH_TEST_IS_ACTIVE = 'mailjet/test_mode/is_active';
     public const PATH_TEST_EMAIL = 'mailjet/test_mode/email';
 
@@ -43,9 +47,9 @@ class Config extends AbstractHelper
     /**
      * Config constructor.
      *
-     * @param EncryptorInterface    $encryptor
-     * @param ScopeConfigInterface  $scopeConfig
-     * @param Context               $context
+     * @param EncryptorInterface   $encryptor
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Context              $context
      */
     public function __construct(
         EncryptorInterface $encryptor,
@@ -54,8 +58,8 @@ class Config extends AbstractHelper
     ) {
         parent::__construct($context);
 
-        $this->encryptor    = $encryptor;
-        $this->scopeConfig  = $scopeConfig;
+        $this->encryptor   = $encryptor;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -72,23 +76,39 @@ class Config extends AbstractHelper
     /**
      * get Api Public Key
      *
-     * @param null $storeId
+     * @param string $kind
+     * @param null   $storeId
      * @return string
      */
-    public function getApiKeyPublic($storeId = null): string
+    public function getApiKeyPublic(string $kind, $storeId = null): string
     {
-        return (string)$this->getConfigValue(self::PATH_API_KEY_PUBLIC, $storeId);
+        /** @var string $key */
+        if ($kind === self::KIND_TRANSACTIONAL) {
+            $key = self::PATH_TRANSACTIONAL_API_KEY_PUBLIC;
+        } else {
+            $key = self::PATH_NEWSLETTER_API_KEY_PUBLIC;
+        }
+
+        return (string)$this->getConfigValue($key, $storeId);
     }
 
     /**
      * get Api Secret Key
      *
-     * @param null $storeId
+     * @param string $kind
+     * @param null   $storeId
      * @return string
      */
-    public function getApiKeyPrivate($storeId = null): string
+    public function getApiKeyPrivate(string $kind, $storeId = null): string
     {
-        return (string)$this->encryptor->decrypt($this->getConfigValue(self::PATH_API_KEY_PRIVATE, $storeId));
+        /** @var string $key */
+        if ($kind === self::KIND_TRANSACTIONAL) {
+            $key = self::PATH_TRANSACTIONAL_API_KEY_PRIVATE;
+        } else {
+            $key = self::PATH_NEWSLETTER_API_KEY_PRIVATE;
+        }
+
+        return (string)$this->encryptor->decrypt($this->getConfigValue($key, $storeId));
     }
 
     /**
@@ -99,7 +119,7 @@ class Config extends AbstractHelper
      */
     public function getContactList($storeId = null): string
     {
-        return (string)$this->getConfigValue(self::PATH_CONTACT_LIST, $storeId);
+        return (string)$this->getConfigValue(self::PATH_NEWSLETTER_CONTACT_LIST, $storeId);
     }
 
     /**
