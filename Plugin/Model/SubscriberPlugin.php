@@ -176,13 +176,13 @@ class SubscriberPlugin
      */
     public function afterSetOrigData(Subscriber $subject, $subscriber)
     {
-        if (strlen($subscriber->getData('subscriber_firstname')) !== '') {
+        if ($subscriber->getData('subscriber_firstname') && strlen($subscriber->getData('subscriber_firstname')) !== '') {
             $subscriber->setData('firstname', $subscriber->getData('subscriber_firstname'));
         }
-        if (strlen($subscriber->getData('subscriber_lastname')) !== '') {
+        if ($subscriber->getData('subscriber_lastname') && strlen($subscriber->getData('subscriber_lastname')) !== '') {
             $subscriber->setData('lastname', $subscriber->getData('subscriber_lastname'));
         }
-        if (strlen($subscriber->getData('subscriber_dob')) !== '') {
+        if ($subscriber->getData('subscriber_dob') && strlen($subscriber->getData('subscriber_dob')) !== '') {
             $subscriber->setData('dob', $subscriber->getData('subscriber_dob'));
         }
         return $subscriber;
