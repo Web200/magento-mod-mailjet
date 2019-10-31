@@ -5,6 +5,7 @@ namespace Web200\Mailjet\Model\Mail;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Web200\Mailjet\Helper\Config;
+use Web200\Mailjet\Logger\Logger;
 use Web200\Mailjet\Model\Store as StoreModel;
 use Web200\Mailjet\Model\Webservice\Email as MailjetEmail;
 use Zend\Mail\Address as ZendMailAddress;
@@ -34,22 +35,31 @@ class Api
      * @var StoreModel
      */
     protected $storeModel;
+    /**
+     * Description $logger field
+     *
+     * @var Logger $logger
+     */
+    protected $logger;
 
     /**
      * Api constructor.
      *
-     * @param Json         $json
-     * @param StoreModel   $storeModel
-     * @param Config       $config
+     * @param Json       $json
+     * @param StoreModel $storeModel
+     * @param Config     $config
+     * @param Logger     $logger
      */
     public function __construct(
         Json $json,
         StoreModel $storeModel,
-        Config $config
+        Config $config,
+        Logger $logger
     ) {
-        $this->json         = $json;
-        $this->config       = $config;
-        $this->storeModel   = $storeModel;
+        $this->json       = $json;
+        $this->config     = $config;
+        $this->storeModel = $storeModel;
+        $this->logger     = $logger;
     }
 
     /**
@@ -62,7 +72,7 @@ class Api
         $templateId    = 0;
         $mailVariables = [];
 
-        $mailjetEmail = new MailjetEmail();
+        $mailjetEmail = new MailjetEmail($this->logger, $this->config);
         $mailjetEmail->setStoreId($this->storeModel->getStoreId());
 
         $message = Message::fromString($transport->getMessage()->getRawMessage());
