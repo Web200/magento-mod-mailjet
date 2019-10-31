@@ -23,10 +23,6 @@ use Zend\Mail\Message;
 class Api
 {
     /**
-     * @var MailjetEmail
-     */
-    protected $mailjetEmail;
-    /**
      * @var Json
      */
     protected $json;
@@ -42,18 +38,15 @@ class Api
     /**
      * Api constructor.
      *
-     * @param MailjetEmail $mailjetEmail
      * @param Json         $json
      * @param StoreModel   $storeModel
      * @param Config       $config
      */
     public function __construct(
-        MailjetEmail $mailjetEmail,
         Json $json,
         StoreModel $storeModel,
         Config $config
     ) {
-        $this->mailjetEmail = $mailjetEmail;
         $this->json         = $json;
         $this->config       = $config;
         $this->storeModel   = $storeModel;
@@ -69,7 +62,8 @@ class Api
         $templateId    = 0;
         $mailVariables = [];
 
-        $this->mailjetEmail->setStoreId($this->storeModel->getStoreId());
+        $mailjetEmail = new MailjetEmail();
+        $mailjetEmail->setStoreId($this->storeModel->getStoreId());
 
         $message = Message::fromString($transport->getMessage()->getRawMessage());
         try {
@@ -80,21 +74,21 @@ class Api
             if (isset($bodyVariables['variables'])) {
                 $mailVariables = $bodyVariables['variables'];
             }
-            $this->mailjetEmail->setVariables($mailVariables);
-            $this->mailjetEmail->setTemplateId($templateId);
+            $mailjetEmail->setVariables($mailVariables);
+            $mailjetEmail->setTemplateId($templateId);
         } catch (\Exception $e) {
         }
 
         if ($templateId === 0) {
-            $this->mailjetEmail->setSubject($message->getSubject());
-            $this->mailjetEmail->setHtmlPart($message->getBodyText());
-            //$this->mailjetEmail->setTextPart('test');
+            $mailjetEmail->setSubject($message->getSubject());
+            $mailjetEmail->setHtmlPart($message->getBodyText());
+            //$mailjetEmail->setTextPart('test');
         }
 
         /** @var ZendMailAddress $address */
         foreach ($message->getFrom() as $address) {
-            $this->mailjetEmail->setFromEmail($address->getEmail());
-            $this->mailjetEmail->setFromName($address->getName());
+            $mailjetEmail->setFromEmail($address->getEmail());
+            $mailjetEmail->setFromName($address->getName());
         }
 
         $to = [];
@@ -115,16 +109,16 @@ class Api
         if (!$message->getReplyTo()->count()) {
             $returnPathEmail = $message->getFrom()->count() ? $message->getFrom() : $this->getFromEmailAddress();
             if (is_string($returnPathEmail)) {
-                $this->mailjetEmail->setReplyToEmail($returnPathEmail);
+                $mailjetEmail->setReplyToEmail($returnPathEmail);
             } elseif ($returnPathEmail instanceof ZendMailAddressList) {
                 foreach ($returnPathEmail as $address) {
-                    $this->mailjetEmail->setReplyToEmail($address->getEmail());
-                    $this->mailjetEmail->setReplyToName($address->getName());
+                    $mailjetEmail->setReplyToEmail($address->getEmail());
+                    $mailjetEmail->setReplyToName($address->getName());
                 }
             }
         }
 
-        $this->mailjetEmail->setTo($to);
-        $this->mailjetEmail->send();
+        $mailjetEmail->setTo($to);
+        $mailjetEmail->send();
     }
 }
