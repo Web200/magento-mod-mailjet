@@ -104,6 +104,14 @@ class Email extends Webservice
                 ];
             }
 
+//            "Attachments": [
+//								{
+//                                    "ContentType": "text/plain",
+//										"Filename": "test.txt",
+//										"Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+//								}
+//						]
+
             $body = [
                 'Messages' => [ $message ]
             ];
