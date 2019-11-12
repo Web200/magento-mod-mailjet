@@ -87,6 +87,7 @@ class Template extends Webservice
     public function getTemplates(): array
     {
         if ($this->cacheTemplates === null) {
+            $this->cacheTemplates = [];
             try {
                 $api      = $this->initApi(Config::KIND_TRANSACTIONAL);
                 $filters  = [
