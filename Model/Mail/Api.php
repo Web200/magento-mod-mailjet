@@ -77,7 +77,7 @@ class Api
 
         $message = Message::fromString($transport->getMessage()->getRawMessage());
         try {
-            $bodyVariables = $this->json->unserialize($message->getBody());
+            $bodyVariables = $this->json->unserialize($this->getBody($message));
             if (isset($bodyVariables['template_id'])) {
                 $templateId = (int)$bodyVariables['template_id'];
             }
@@ -130,5 +130,16 @@ class Api
 
         $mailjetEmail->setTo($to);
         $mailjetEmail->send();
+    }
+
+    /**
+     * Get Body
+     *
+     * @param $message
+     * @return mixed
+     */
+    protected function getBody($message): string
+    {
+        return str_replace("=\r\n", '', (string)$message->getBody());
     }
 }
