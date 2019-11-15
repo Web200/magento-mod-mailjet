@@ -91,7 +91,7 @@ class Api
 
         if ($templateId === 0) {
             $mailjetEmail->setSubject($message->getSubject());
-            $mailjetEmail->setHtmlPart($message->getBodyText());
+            $mailjetEmail->setHtmlPart($this->getBody($message));
             //$mailjetEmail->setTextPart('test');
         }
 
@@ -140,6 +140,9 @@ class Api
      */
     protected function getBody($message): string
     {
-        return str_replace("=\r\n", '', (string)$message->getBody());
+        if ($message->getEncoding() === 'ASCII') {
+            return quoted_printable_decode($message->getBody());
+        }
+        return $message->getBody();
     }
 }
