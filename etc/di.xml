@@ -16,6 +16,7 @@
     <type name="Magento\Newsletter\Model\Subscriber">
         <plugin name="w200-mailjet-subscriber"
                 type="Web200\Mailjet\Plugin\Model\SubscriberPlugin" sortOrder="10"/>
+        <plugin sortOrder="1" name="web200MailjetSubscriber" type="Web200\Mailjet\Plugin\Model\SubscriberPlugin"/>
     </type>
     <!-- Add firstname, Lastname, Dob in Subscriber Collection  -->
     <type name="Magento\Newsletter\Model\ResourceModel\Subscriber\Collection">

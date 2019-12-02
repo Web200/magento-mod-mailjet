@@ -25,23 +25,23 @@ use Web200\Mailjet\Model\Webservice\Contact;
 class SubscriberPlugin
 {
     /**
-     * @var Contact
+     * @var Contact $contact
      */
     protected $contact;
     /**
-     * @var CustomerRepository
+     * @var CustomerRepository $customerRepository
      */
     protected $customerRepository;
     /**
-     * @var CustomerSession
+     * @var CustomerSession $customerSession
      */
     protected $customerSession;
     /**
-     * @var StoreManagerInterface
+     * @var StoreManagerInterface $storeManager
      */
     protected $storeManager;
     /**
-     * @var Config
+     * @var Config $config
      */
     protected $config;
 
@@ -73,6 +73,7 @@ class SubscriberPlugin
      *
      * @param $subscriber
      * @param $customerId
+     *
      * @return array
      * @throws LocalizedException
      */
@@ -93,12 +94,13 @@ class SubscriberPlugin
                 $this->buildProperties(
                     [
                         'firstname' => $customer->getFirstname(),
-                        'lastname' => $customer->getLastname(),
-                        'dob' => $customer->getDob(),
+                        'lastname'  => $customer->getLastname(),
+                        'dob'       => $customer->getDob(),
                     ]
                 )
             );
         }
+
         return [$customerId];
     }
 
@@ -107,6 +109,7 @@ class SubscriberPlugin
      *
      * @param $subscriber
      * @param $customerId
+     *
      * @return array
      * @throws LocalizedException
      */
@@ -127,13 +130,38 @@ class SubscriberPlugin
                 $this->buildProperties(
                     [
                         'firstname' => $customer->getFirstname(),
-                        'lastname' => $customer->getLastname(),
-                        'dob' => $customer->getDob(),
+                        'lastname'  => $customer->getLastname(),
+                        'dob'       => $customer->getDob(),
                     ]
                 )
             );
         }
+
         return [$customerId];
+    }
+
+
+    /**
+     * Before unsubscribe
+     *
+     * @param Subscriber $subscriber
+     */
+    public function beforeUnsubscribe(\Magento\Newsletter\Model\Subscriber $subscriber)
+    {
+        if ($this->config->active()) {
+            $this->contact->update(
+                false,
+                $subscriber->getEmail(),
+                $subscriber->getFirstname(),
+                $this->buildProperties(
+                    [
+                        'firstname' => $subscriber->getFirstname(),
+                        'lastname'  => $subscriber->getLastname(),
+                        'dob'       => $subscriber->getDob(),
+                    ]
+                )
+            );
+        };
     }
 
     /**
@@ -141,6 +169,7 @@ class SubscriberPlugin
      *
      * @param $subscriber
      * @param $email
+     *
      * @return array
      */
     public function beforeSubscribe(
@@ -148,9 +177,9 @@ class SubscriberPlugin
         $email
     ) {
         if ($this->config->active()) {
-            $lastname = $subscriber->getData('subscriber_lastname');
+            $lastname  = $subscriber->getData('subscriber_lastname');
             $firstname = $subscriber->getData('subscriber_firstname');
-            $dob = $subscriber->getData('subscriber_dob');
+            $dob       = $subscriber->getData('subscriber_dob');
             $this->contact->update(
                 true,
                 $email,
@@ -158,12 +187,13 @@ class SubscriberPlugin
                 $this->buildProperties(
                     [
                         'firstname' => $firstname,
-                        'lastname' => $lastname,
-                        'dob' => $dob
+                        'lastname'  => $lastname,
+                        'dob'       => $dob
                     ]
                 )
             );
         }
+
         return [$email];
     }
 
@@ -171,7 +201,8 @@ class SubscriberPlugin
      * Add Firstname / Lastname / Dob to Subscriber model
      *
      * @param Subscriber $subject
-     * @param $subscriber
+     * @param            $subscriber
+     *
      * @return mixed
      */
     public function afterSetOrigData(Subscriber $subject, $subscriber)
@@ -185,6 +216,7 @@ class SubscriberPlugin
         if ($subscriber->getData('subscriber_dob') && strlen($subscriber->getData('subscriber_dob')) !== '') {
             $subscriber->setData('dob', $subscriber->getData('subscriber_dob'));
         }
+
         return $subscriber;
     }
 
@@ -192,6 +224,7 @@ class SubscriberPlugin
      * Build properties
      *
      * @param $properties
+     *
      * @return mixed
      */
     protected function buildProperties($properties)
@@ -199,11 +232,12 @@ class SubscriberPlugin
         $final = [];
         foreach ($properties as $key => $value) {
             if ($key === 'dob' && $value !== '') {
-                $final['dob'] = $value.'T00:00:00+00:00';
+                $final['dob'] = $value . 'T00:00:00+00:00';
             } else {
                 $final[$key] = $value;
             }
         }
+
         return $final;
     }
 }
