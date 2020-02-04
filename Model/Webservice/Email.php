@@ -116,7 +116,6 @@ class Email extends Webservice
                 'Messages' => [ $message ]
             ];
 
-            $this->logger->error(print_r($body, true));
             $response = $api->post(Resources::$Email, ['body' => $body]);
             if (!$response->success()) {
                 $this->logger->error($response->getReasonPhrase());
