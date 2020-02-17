@@ -116,6 +116,26 @@ class Api
             }
         }
 
+        $bcc = [];
+        foreach ($message->getBcc() as $address) {
+            if (!$this->config->testIsActive()) {
+                $bcc[] = [
+                    'Email' => $address->getEmail(),
+                    'Name' => $address->getName()
+                ];
+            }
+        }
+
+        $cc = [];
+        foreach ($message->getCc() as $address) {
+            if (!$this->config->testIsActive()) {
+                $cc[] = [
+                    'Email' => $address->getEmail(),
+                    'Name' => $address->getName()
+                ];
+            }
+        }
+
         if (!$message->getReplyTo()->count()) {
             $returnPathEmail = $message->getFrom()->count() ? $message->getFrom() : $this->getFromEmailAddress();
             if (is_string($returnPathEmail)) {
@@ -129,6 +149,12 @@ class Api
         }
 
         $mailjetEmail->setTo($to);
+        if (!empty($bcc)) {
+            $mailjetEmail->setBcc($bcc);
+        }
+        if (!empty($cc)) {
+            $mailjetEmail->setCc($cc);
+        }
         $mailjetEmail->send();
     }
 

@@ -31,7 +31,19 @@ class Email extends Webservice
      *
      * @var array
      */
-    protected $to = '';
+    protected $to = [];
+    /**
+     * array [['Email' => $email, 'Name' => $name] ]
+     *
+     * @var array
+     */
+    protected $cc = [];
+    /**
+     * array [['Email' => $email, 'Name' => $name] ]
+     *
+     * @var array
+     */
+    protected $bcc = [];
     /**
      * @var string
      */
@@ -79,6 +91,14 @@ class Email extends Webservice
                 'Name' => $this->getFromName()
             ];
             $message['To'] = $this->getTo();
+
+            if (!empty($this->getBcc())) {
+                $message['Bcc'] = $this->getBcc();
+            }
+
+            if (!empty($this->getCc())) {
+                $message['Cc'] = $this->getCc();
+            }
 
             if ($this->getTemplateId()) {
                 $message['TemplateID']       = $this->getTemplateId();
@@ -211,6 +231,52 @@ class Email extends Webservice
     public function setTo($to): Email
     {
         $this->to = $to;
+
+        return $this;
+    }
+
+    /**
+     * Get Bcc Email
+     *
+     * @return array
+     */
+    public function getBcc(): array
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * Set Bcc Email
+     *
+     * @param array $bcc
+     * @return Email
+     */
+    public function setBcc($bcc): Email
+    {
+        $this->bcc = $bcc;
+
+        return $this;
+    }
+
+    /**
+     * Get Cc Email
+     *
+     * @return array
+     */
+    public function getCc(): array
+    {
+        return $this->cc;
+    }
+
+    /**
+     * Set Cc Email
+     *
+     * @param array $cc
+     * @return Email
+     */
+    public function setCc($cc): Email
+    {
+        $this->cc = $cc;
 
         return $this;
     }
